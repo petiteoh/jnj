@@ -44,5 +44,8 @@
     "> 1%",
     "maintained node versions",
     "not dead"
-  ]
+  ],
+  "dependencies": {
+    "canvas-elements": "0.0.6"
+  }
 }
