@@ -1,22 +1,10 @@
 import "./styles/index.scss";
+import ForceField from "./scripts/force_field";
+import Main from "./scripts/main";
 
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
+const game = new Main(ctx, canvas);
 
-ctx.beginPath();
-ctx.rect(20, 40, 50, 50);
-ctx.fillStyle = "#FF0000";
-ctx.fill();
-ctx.closePath();
-
-ctx.beginPath();
-ctx.arc(240, 160, 20, 0, Math.PI * 2, false);
-ctx.fillStyle = "green";
-ctx.fill();
-ctx.closePath();
-
-ctx.beginPath();
-ctx.rect(160, 10, 100, 40);
-ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
-ctx.stroke();
-ctx.closePath();
+// const forceField = new ForceField(ctx);
+game.draw();
