@@ -6,19 +6,22 @@ class ForceField {
         debugger
         this.mouseX = 0;
         this.mouseY = 0;
-        this.canvas.addEventListener("mousemove", this.setMousePosition.bind(this), false);
+        this.setMousePosition = this.setMousePosition.bind(this);
+        this.isColliding = false;
+        // this.canvas.addEventListener("mousemove", this.setMousePosition.bind(this), false);
     }
+
 
     setMousePosition(e) {
         this.mouseX = e.clientX - this.canvasPos.x;
         this.mouseY = e.clientY - this.canvasPos.y;
-        console.log(`${this.mouseX} ${this.mouseY}`)
+        // console.log(`${this.mouseX} ${this.mouseY}`)
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.ctx.beginPath();
-        this.ctx.arc(this.mouseX, this.mouseY, 50, 0, 2 * Math.PI, true);
-        this.ctx.fillStyle = "#FF6A6A";
-        this.ctx.fill();
+        this.update();
+        // this.ctx.beginPath();
+        // this.ctx.arc(this.mouseX, this.mouseY, 50, 0, 2 * Math.PI, true);
+        // this.ctx.fillStyle = "#FF6A6A";
+        // this.ctx.fill();
     }
     
     getPosition(canvas) {
@@ -40,15 +43,14 @@ class ForceField {
     }
     
     update() {
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
-      this.ctx.beginPath();
-      this.ctx.arc(100, 100, 50, 0, 2 * Math.PI, true);
-      this.ctx.fillStyle = "#FF6A6A";
-      this.ctx.fill();
-    
-      requestAnimationFrame(this.update.bind(this));
-      // this is a global function so you need to bind it
+        // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // requestAnimationFrame(this.update.bind(this));
+        // this is a global function so you need to bind it
+        this.ctx.beginPath();
+        this.ctx.arc(this.mouseX, this.mouseY, 50, 0, 2 * Math.PI, true);
+        this.ctx.fillStyle = "#FF6A6A";
+        this.ctx.fill();
     }
 }
 

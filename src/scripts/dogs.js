@@ -1,16 +1,24 @@
 class Dog {
-    constructor(canvas) {
+    constructor(canvas, ctx, x, y, vx, vy) {
         // this.posX = posX;
         // this.posY = posY;
-        this.radius = 5;
+        this.vx = vx;
+        this.vy = vy;
+        
+        this.radius = 20;
         this.color = "#4e4e4e";
         this.canvas = canvas;
         this.randomPos();
+        
+        this.ctx = ctx;
+        this.isColliding = false;
+        // another instance variable can keep track if its a stray or not eh boolean
+        // which feeds into the win/lose Main.js to check if that is the target
 }
 
     randomPos() {
-        this.posX = this.canvas.width * Math.random();
-        this.posY = this.canvas.height * Math.random();
+        this.x = this.canvas.width * Math.random();
+        this.y = this.canvas.height * Math.random();
     }
 
     radius(maxX, maxY, numDogs) {
@@ -25,19 +33,24 @@ class Dog {
     // };
 
     moveRandom() {
-        let dx = Math.random() * 2 - 1;
-        let dy = Math.random() * 2 - 1;
-
-        this.posX = Math.abs((this.posX + dx * this.radius * 0.1) % maxX);
-        this.posY = Math.abs((this.posY + dy * this.radius * 0.1) % maxY);
+        this.x += this.vx;
+        this.y += this.vy;
     }
 
-    render(ctx) {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.posX, this.posY, this.radius, 0, 2 * Math.PI, false);
-        ctx.fill();
+    draw() {
+        debugger
+        this.ctx.fillStyle = this.isColliding ? this.color : '#0099b0'; // add in the logic to reverse it's direction
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+        this.ctx.fill();
     }
+
+    // render(ctx) {
+    //     ctx.fillStyle = this.color;
+    //     ctx.beginPath();
+    //     ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+    //     ctx.fill();
+    // }
 }
 
 export default Dog;
