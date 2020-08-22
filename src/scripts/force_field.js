@@ -8,24 +8,17 @@ class ForceField {
         this.mouseY = 0;
         this.setMousePosition = this.setMousePosition.bind(this);
         this.isColliding = false;
-        // this.canvas.addEventListener("mousemove", this.setMousePosition.bind(this), false);
+        debugger;
     }
-
 
     setMousePosition(e) {
         this.mouseX = e.clientX - this.canvasPos.x;
         this.mouseY = e.clientY - this.canvasPos.y;
-        // console.log(`${this.mouseX} ${this.mouseY}`)
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.update();
-        // this.ctx.beginPath();
-        // this.ctx.arc(this.mouseX, this.mouseY, 50, 0, 2 * Math.PI, true);
-        // this.ctx.fillStyle = "#FF6A6A";
-        // this.ctx.fill();
     }
     
     getPosition(canvas) {
-        debugger
       let xPosition = 0;
       let yPosition = 0;
     
@@ -35,7 +28,6 @@ class ForceField {
         canvas = canvas.offsetParent;
       }
 
-      debugger;
       return {
         x: xPosition,
         y: yPosition,
@@ -43,13 +35,9 @@ class ForceField {
     }
     
     update() {
-        // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // requestAnimationFrame(this.update.bind(this));
-        // this is a global function so you need to bind it
         this.ctx.beginPath();
         this.ctx.arc(this.mouseX, this.mouseY, 50, 0, 2 * Math.PI, true);
-        this.ctx.fillStyle = "#FF6A6A";
+        this.ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
         this.ctx.fill();
     }
 }
