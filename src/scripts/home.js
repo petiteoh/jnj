@@ -2,13 +2,15 @@ class Home {
     constructor(ctx, canvas) {
         this.ctx = ctx;
         this.canvas = canvas;
+        this.doorX = 298;
+        this.doorY = 190;
         this.doorWidth = 15;
         this.doorHeight = 20;
     }
 
     drawDoor() {
         this.ctx.fillStyle = "#754719";
-        this.ctx.fillRect(298, 190, this.doorWidth, this.doorHeight);
+        this.ctx.fillRect(this.doorX, this.doorY, this.doorWidth, this.doorHeight);
     }
 
     draw() {

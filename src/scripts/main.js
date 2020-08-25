@@ -18,33 +18,6 @@ class Main {
     this.forceField.setMousePosition(e)
   }
 
-  detectCollisionsWithForce() {
-    let obj1 = this.forceField
-    let obj2;
-
-    // Reset collision state of all objects
-    for (let i = 0; i < this.dogs.length; i++) {
-      this.dogs[i].isCollidingWithForceField = false;
-    }
-
-    // Start checking for collisions
-    for (let i = 0; i < this.dogs.length; i++) {
-      obj2 = this.dogs[i];
-
-      // Compare object1 with object2
-      // if (this.wallCollision(obj2)) {
-        if (this.intersect(obj1.mouseX, obj1.mouseY, 50, obj2.x, obj2.y, obj2.radius)) {
-          obj1.isColliding = true;
-          obj2.isCollidingWithForceField = true;
-          // obj1.vx = -obj1.vx;
-          // obj1.vy = -obj1.vy;
-          // obj2.vx = -obj2.vx;
-          // obj2.vy = -obj2.vy;
-        }
-      // }
-    }
-  }
-
   intersect(x1, y1, r1, x2, y2, r2) {
     // Calculate the distance between the two circles
     let circDistance = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
@@ -56,7 +29,7 @@ class Main {
   
   wallCollision(newX, newY, dog) {
     const padding = 0;
-    
+
     if (newX + dog.radius > this.canvas.width - padding || newX < dog.radius + padding) {
       return true;
     } 
@@ -88,38 +61,56 @@ class Main {
     //   return false;
     // }
     
-    circleRect(cx, cy, r, sx, sy, sw, sh) {
-      let textX = cx;
-      let testY = cy;
+    circleRect(cx, cy, r, rx, ry, rw, rh, dog) {
+      let newX = cx;
+      let newY = cy;
   
       // which edge is closest?
-      if (cx < rx) testX = rx;      // test left edge
-      else if (cx > rx + rw) testX = rx + rw;   // right edge
-      if (cy < ry) testY = ry;      // top edge
-      else if (cy > ry + rh) testY = ry + rh;   // bottom edge
-  
+      if (cx < rx) { // left edge
+        newX = rx;
+      } else if (cx > rx + rw) { // right edge
+        newX = rx + rw;
+      }   
+
+      if (cy < ry) { // top edge
+        newY = ry; 
+      } else if (cy > ry + rh) { // bottom edge
+        newY = ry + rh;   
+      }
+
       // get distance from closest edges
-      let distX = cx - testX;
-      let distY = cy - testY;
-      let distance = sqrt((distX * distX) + (distY * distY));
+      let distX = cx - newX;
+      let distY = cy - newY;
+      let distance = Math.sqrt((distX * distX) + (distY * distY));
   
       // if the distance is less than the radius, collision!
-      if (distance <= radius) {
-        this.score++
-        return true
+      if (distance <= r) {
+        if (dog.color === "#803809" && dog.isHome === false)
+          dog.isHome = true;
+          this.score++
+          return true;
       }
   
       return false;
     }
 
+
+    // change dogs to transprent
+    // add alert to signify win // separate function to check win
+    // change score to timer 
+    // modal 
+
+
   doorCollision(dog) {
-    let hit = this.circleRect(this.forceField.mouseX, this.forceField.mouseY, 50, 298, 190, 15, 20)
+    let hit = this.circleRect(dog.x, dog.y, dog.radius, this.home.doorX, this.home.doorY, this.home.doorWidth, this.home.doorHeight)
     
     if (hit) {
-      dog.fill(255, 150, 0);
+      dog.color = "#000000"
+      console.log("home")
     }
     else {
-      dog.forceField.fill(0, 150, 255);
+      // dog.color = "#000000"
+      console.log("not home")
     }
     // rect(sx, sy, sw, sh);
   }
@@ -171,17 +162,11 @@ class Main {
 
 
   game() {
-    // let timeLapsed = (timeStamp - oldTime) / 1000;
-    // let oldTime = timeStamp;
-
     this.dogs.forEach((dog) => {
       // dog.moveRandom();
-      // this.wallCollision(dog);
-      // this.doorCollision(dog);
+      this.doorCollision(dog);
     });
     
-    // this.detectCollisions();
-    this.detectCollisionsWithForce();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     
     this.dogs.forEach((dog) => {
