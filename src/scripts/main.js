@@ -61,38 +61,56 @@ class Main {
     //   return false;
     // }
     
-    circleRect(cx, cy, r, sx, sy, sw, sh) {
-      let textX = cx;
-      let testY = cy;
+    circleRect(cx, cy, r, rx, ry, rw, rh, dog) {
+      let newX = cx;
+      let newY = cy;
   
       // which edge is closest?
-      if (cx < rx) testX = rx;      // test left edge
-      else if (cx > rx + rw) testX = rx + rw;   // right edge
-      if (cy < ry) testY = ry;      // top edge
-      else if (cy > ry + rh) testY = ry + rh;   // bottom edge
-  
+      if (cx < rx) { // left edge
+        newX = rx;
+      } else if (cx > rx + rw) { // right edge
+        newX = rx + rw;
+      }   
+
+      if (cy < ry) { // top edge
+        newY = ry; 
+      } else if (cy > ry + rh) { // bottom edge
+        newY = ry + rh;   
+      }
+
       // get distance from closest edges
-      let distX = cx - testX;
-      let distY = cy - testY;
-      let distance = sqrt((distX * distX) + (distY * distY));
+      let distX = cx - newX;
+      let distY = cy - newY;
+      let distance = Math.sqrt((distX * distX) + (distY * distY));
   
       // if the distance is less than the radius, collision!
-      if (distance <= radius) {
-        this.score++
-        return true
+      if (distance <= r) {
+        if (dog.color === "#803809" && dog.isHome === false)
+          dog.isHome = true;
+          this.score++
+          return true;
       }
   
       return false;
     }
 
+
+    // change dogs to transprent
+    // add alert to signify win // separate function to check win
+    // change score to timer 
+    // modal 
+
+
   doorCollision(dog) {
-    let hit = this.circleRect(this.forceField.mouseX, this.forceField.mouseY, 50, 298, 190, 15, 20)
+    let hit = this.circleRect(dog.x, dog.y, dog.radius, this.home.doorX, this.home.doorY, this.home.doorWidth, this.home.doorHeight)
     
     if (hit) {
-      dog.fill(255, 150, 0);
+      dog.color = "#000000"
+      console.log("home")
     }
     else {
-      dog.forceField.fill(0, 150, 255);
+      // dog.color = "#000000"
+      console.log("not home")
     }
     // rect(sx, sy, sw, sh);
   }
@@ -146,7 +164,7 @@ class Main {
   game() {
     this.dogs.forEach((dog) => {
       // dog.moveRandom();
-      // this.doorCollision(dog);
+      this.doorCollision(dog);
     });
     
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

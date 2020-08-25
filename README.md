@@ -16,6 +16,9 @@ JnJ is a game where you use your cursor to guide Jack and Jill while hidden amon
    - Javascript and HTML Canvas
 
 ## WireFrames
+[Greeting Modal](https://wireframe.cc/LUjo92)
+<img src="./src/images/greeting-page.png" alt="greeting-modal"/>
+<br>
 [Level 1 Wireframe](https://wireframe.cc/8UGtUw)
 <img src="./src/images/level1-wireframe.png" alt="jnj-level1-wireframe"/>
 

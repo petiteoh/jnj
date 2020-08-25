@@ -10,6 +10,7 @@ class Dog {
         this.randomPos();
         this.ctx = ctx;
         this.isCollidingWithForceField = false;
+        this.isHome = false;
         // another instance variable can keep track if its a stray or not eh boolean
         // which feeds into the win/lose Main.js to check if that is the target
 }
