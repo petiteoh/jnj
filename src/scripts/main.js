@@ -18,33 +18,6 @@ class Main {
     this.forceField.setMousePosition(e)
   }
 
-  detectCollisionsWithForce() {
-    let obj1 = this.forceField
-    let obj2;
-
-    // Reset collision state of all objects
-    for (let i = 0; i < this.dogs.length; i++) {
-      this.dogs[i].isCollidingWithForceField = false;
-    }
-
-    // Start checking for collisions
-    for (let i = 0; i < this.dogs.length; i++) {
-      obj2 = this.dogs[i];
-
-      // Compare object1 with object2
-      // if (this.wallCollision(obj2)) {
-        if (this.intersect(obj1.mouseX, obj1.mouseY, 50, obj2.x, obj2.y, obj2.radius)) {
-          obj1.isColliding = true;
-          obj2.isCollidingWithForceField = true;
-          // obj1.vx = -obj1.vx;
-          // obj1.vy = -obj1.vy;
-          // obj2.vx = -obj2.vx;
-          // obj2.vy = -obj2.vy;
-        }
-      // }
-    }
-  }
-
   intersect(x1, y1, r1, x2, y2, r2) {
     // Calculate the distance between the two circles
     let circDistance = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
@@ -56,7 +29,7 @@ class Main {
   
   wallCollision(newX, newY, dog) {
     const padding = 0;
-    
+
     if (newX + dog.radius > this.canvas.width - padding || newX < dog.radius + padding) {
       return true;
     } 
@@ -171,17 +144,11 @@ class Main {
 
 
   game() {
-    // let timeLapsed = (timeStamp - oldTime) / 1000;
-    // let oldTime = timeStamp;
-
     this.dogs.forEach((dog) => {
       // dog.moveRandom();
-      // this.wallCollision(dog);
       // this.doorCollision(dog);
     });
     
-    // this.detectCollisions();
-    this.detectCollisionsWithForce();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     
     this.dogs.forEach((dog) => {
