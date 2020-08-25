@@ -9,7 +9,7 @@ class Dog {
         this.canvas = canvas;
         this.randomPos();
         this.ctx = ctx;
-        this.isColliding = false;
+        this.isCollidingWithForceField = false;
         // another instance variable can keep track if its a stray or not eh boolean
         // which feeds into the win/lose Main.js to check if that is the target
 }
@@ -26,8 +26,16 @@ class Dog {
     };
 
     moveRandom() {
-        this.x += this.vx;
-        this.y += this.vy;
+        let dogShake = true;
+
+        if (dogShake === true) {
+            this.vx += 5;
+            this.vy += 5;
+            dogShake = false; 
+        } else {
+            this.vx -= 5;
+            this.vy -= 5;
+        }
     }
 
     draw() {

@@ -4,15 +4,14 @@ import Home from "./home"
 
 class Main {
   constructor(ctx, canvas) {
-    this.dogs = [];
     this.ctx = ctx;
     this.canvas = canvas;
+    this.dogs = [];
     this.makeDogs(10);
     this.forceField = new ForceField(this.ctx, this.canvas)
     this.home = new Home(this.ctx, this.canvas)
     this.score = 0;
     this.canvas.addEventListener("mousemove", this.mouseMoveHandler.bind(this), false);
-    debugger
   }
 
   mouseMoveHandler(e) {
@@ -25,7 +24,7 @@ class Main {
 
     // Reset collision state of all objects
     for (let i = 0; i < this.dogs.length; i++) {
-      this.dogs[i].isColliding = false;
+      this.dogs[i].isCollidingWithForceField = false;
     }
 
     // Start checking for collisions
@@ -33,14 +32,16 @@ class Main {
       obj2 = this.dogs[i];
 
       // Compare object1 with object2
-      if (this.intersect(obj1.mouseX, obj1.mouseY, 50, obj2.x, obj2.y, obj2.radius)) {
-        obj1.isColliding = true;
-        obj2.isColliding = true;
-        obj1.vx = -obj1.vx;
-        obj1.vy = -obj1.vy;
-        obj2.vx = -obj2.vx;
-        obj2.vy = -obj2.vy;
-      }
+      // if (this.wallCollision(obj2)) {
+        if (this.intersect(obj1.mouseX, obj1.mouseY, 50, obj2.x, obj2.y, obj2.radius)) {
+          obj1.isColliding = true;
+          obj2.isCollidingWithForceField = true;
+          // obj1.vx = -obj1.vx;
+          // obj1.vy = -obj1.vy;
+          // obj2.vx = -obj2.vx;
+          // obj2.vy = -obj2.vy;
+        }
+      // }
     }
   }
 
@@ -53,39 +54,90 @@ class Main {
     return circDistance <= ((r1 + r2) * (r1 + r2)) + 5;
   }
   
-  wallCollision(dog) {
-    if (dog.x + dog.vx > this.canvas.width - dog.radius || dog.x + dog.vx < dog.radius) {
-      dog.vx = -dog.vx;
-      return true;
-    } 
+  wallCollision(newX, newY, dog) {
+    const padding = 0;
+    // console.log(dog.isColliding)
+    // console.log(dog.x)
+    // console.log(dog.y)
+    // console.log(this.canvas.width - dog.radius)
+    // console.log(dog.x + dog.radius)
+    // console.log(dog.radius)
+    // console.log(dog.vx)
     
-    if (dog.y + dog.vy < dog.radius || dog.y + dog.vy > this.canvas.height - dog.radius) {
-      dog.vy = -dog.vy;
-      return true;
-    }
+    // if (!dog.isColliding) {
+      if (newX + dog.radius > this.canvas.width - padding || newX < dog.radius + padding) {
+        return true;
+        // dog.isColliding = true;
+        // console.log(dog.isColliding)
+      } 
+    
+      if (newY + dog.radius > this.canvas.height - padding || newY < dog.radius + padding) {
+        return true;
+        // dog.isColliding = true;
+        // console.log(dog.vy)
+        // console.log(dog.isColliding)
+      }
+    // }
 
     return false;
   }
+
+  // doorCollision(dog) {
+  //   if (dog.x + dog.vx > this.home.doorWidth - dog.radius && dog.x + dog.vx < dog.radius) {
+  //     dog.vx = -dog.vx;
+  //     this.score++
+  //     // dog.x = 0
+  //     // dog.y = 0
+  //     return true;
+  //   } 
+  
+  //   if (dog.y + dog.vy < dog.radius && dog.y + dog.vy > this.home.doorHeight - dog.radius) {
+    //     dog.radius = 20;
+    //     this.score++
+    //     // dog.x = 0
+    //     // dog.y = 0
+    //     return true;
+    //   }
+    
+    //   return false;
+    // }
+    
+    circleRect(cx, cy, r, sx, sy, sw, sh) {
+      let textX = cx;
+      let testY = cy;
+  
+      // which edge is closest?
+      if (cx < rx) testX = rx;      // test left edge
+      else if (cx > rx + rw) testX = rx + rw;   // right edge
+      if (cy < ry) testY = ry;      // top edge
+      else if (cy > ry + rh) testY = ry + rh;   // bottom edge
+  
+      // get distance from closest edges
+      let distX = cx - testX;
+      let distY = cy - testY;
+      let distance = sqrt((distX * distX) + (distY * distY));
+  
+      // if the distance is less than the radius, collision!
+      if (distance <= radius) {
+        this.score++
+        return true
+      }
+  
+      return false;
+    }
 
   doorCollision(dog) {
-    if (dog.x + dog.vx > this.home.doorWidth - dog.radius && dog.x + dog.vx < dog.radius) {
-      dog.vx = -dog.vx;
-      this.score++
-      // dog.x = 0
-      // dog.y = 0
-      return true;
-    } 
+    let hit = this.circleRect(this.forceField.mouseX, this.forceField.mouseY, 50, 298, 190, 15, 20)
     
-    if (dog.y + dog.vy < dog.radius && dog.y + dog.vy > this.home.doorHeight - dog.radius) {
-      dog.radius = 20;
-      this.score++
-      // dog.x = 0
-      // dog.y = 0
-      return true;
+    if (hit) {
+      dog.fill(255, 150, 0);
     }
-
-    return false;
+    else {
+      dog.forceField.fill(0, 150, 255);
+    }
+    // rect(sx, sy, sw, sh);
   }
+
 
   makeDogs(dogCount) {
     for (let i = 0; i < dogCount; i++) {
@@ -107,11 +159,15 @@ class Main {
     var yDistance = this.dogs[i].y - this.forceField.mouseY;
     var distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
 
-    if ((this.intersect(this.forceField.mouseX, this.forceField.mouseY, 50, this.dogs[i].x, this.dogs[i].y, this.dogs[i].radius)) && (!this.wallCollision(this.dogs[i]))) {
+    if ((this.intersect(this.forceField.mouseX, this.forceField.mouseY, 50, this.dogs[i].x, this.dogs[i].y, this.dogs[i].radius))) {
       // if (!this.wallCollision(this.dogs[i])) {
           let angle = Math.atan2(yDistance, xDistance);
-          this.dogs[i].x += Math.cos(angle) * distance;
-          this.dogs[i].y += Math.sin(angle) * distance;
+          const newX = this.dogs[i].x + Math.cos(angle) * distance;
+          const newY = this.dogs[i].y + Math.sin(angle) * distance;
+      if (!this.wallCollision(newX, newY, this.dogs[i])) {
+            this.dogs[i].x = newX;
+            this.dogs[i].y = newY;
+          }
       // }
       // else {
       //   this.dogs[i].x = this.dogs[i].x
@@ -128,14 +184,14 @@ class Main {
   }
 
 
-  game(timeStamp) {
-    let timeLapsed = (timeStamp - oldTime) / 1000;
-    let oldTime = timeStamp;
+  game() {
+    // let timeLapsed = (timeStamp - oldTime) / 1000;
+    // let oldTime = timeStamp;
 
     this.dogs.forEach((dog) => {
-      // dog.moveRandom(timeLapsed);
-      this.wallCollision(dog);
-      this.doorCollision(dog);
+      // dog.moveRandom();
+      // this.wallCollision(dog);
+      // this.doorCollision(dog);
     });
     
     // this.detectCollisions();

@@ -3,12 +3,10 @@ class ForceField {
         this.ctx = ctx;
         this.canvas = canvas;
         this.canvasPos = this.getPosition(this.canvas);
-        debugger
         this.mouseX = 0;
         this.mouseY = 0;
         this.setMousePosition = this.setMousePosition.bind(this);
         this.isColliding = false;
-        debugger;
     }
 
     setMousePosition(e) {
