@@ -56,28 +56,14 @@ class Main {
   
   wallCollision(newX, newY, dog) {
     const padding = 0;
-    // console.log(dog.isColliding)
-    // console.log(dog.x)
-    // console.log(dog.y)
-    // console.log(this.canvas.width - dog.radius)
-    // console.log(dog.x + dog.radius)
-    // console.log(dog.radius)
-    // console.log(dog.vx)
     
-    // if (!dog.isColliding) {
-      if (newX + dog.radius > this.canvas.width - padding || newX < dog.radius + padding) {
-        return true;
-        // dog.isColliding = true;
-        // console.log(dog.isColliding)
-      } 
-    
-      if (newY + dog.radius > this.canvas.height - padding || newY < dog.radius + padding) {
-        return true;
-        // dog.isColliding = true;
-        // console.log(dog.vy)
-        // console.log(dog.isColliding)
-      }
-    // }
+    if (newX + dog.radius > this.canvas.width - padding || newX < dog.radius + padding) {
+      return true;
+    } 
+  
+    if (newY + dog.radius > this.canvas.height - padding || newY < dog.radius + padding) {
+      return true;
+    }
 
     return false;
   }
