@@ -11,6 +11,7 @@ class Main {
     this.forceField = new ForceField(this.ctx, this.canvas)
     this.home = new Home(this.ctx, this.canvas)
     this.score = 0;
+    this.time = 0;
     this.canvas.addEventListener("mousemove", this.mouseMoveHandler.bind(this), false);
   }
 
@@ -75,7 +76,11 @@ class Main {
     return false;
   }
 
-  gameCheck
+  gameCheck() {
+    if (this.score === 2) {
+      
+    }
+  }
     // add alert to signify win // separate function to check win
     // change score to timer 
     // modal 
@@ -128,10 +133,18 @@ class Main {
     }
   }
 
-  drawScore() {
+  timer() {
+    let timer = setInterval(this.canvas, 1000)
+    this.time++
+    if (this.score === 2) {
+      clearInterval(timer)
+    }
+  }
+
+  drawTimer() {
     this.ctx.font = "16px Arial";
     this.ctx.fillStyle = "#000000";
-    this.ctx.fillText("Score: " + this.score, 8, 20);
+    this.ctx.fillText("Time: " + this.time, 8, 20);
   }
 
 
@@ -149,7 +162,7 @@ class Main {
     
     this.forceField.update();
     this.home.draw();
-    this.drawScore();
+    this.drawTimer();
     requestAnimationFrame(this.game.bind(this));
     this.move();
   }
